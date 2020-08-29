@@ -1,0 +1,4 @@
+node_modules/
+buildAll.sh
+package-lock.json
+build/
