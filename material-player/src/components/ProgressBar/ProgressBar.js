@@ -66,11 +66,11 @@ const getTime = (seconds) => {
 function ValueLabelComponent(props) {
     const { children, open, value } = props;
     return (
-      <Tooltip open={open} enterTouchDelay={0} placement="top" title={getTime(value)}>
-        {children}
-      </Tooltip>
+        <Tooltip open={open} enterTouchDelay={0} placement="top" title={getTime(value)}>
+            {children}
+        </Tooltip>
     );
-  }
+}
 
 const ProgressBar = (props) => {
     const [focus, setFocus] = useState()
@@ -79,30 +79,34 @@ const ProgressBar = (props) => {
 
     const slider = useRef(null);
 
-    const {classes, progress, setProgress, setTime, play, setPlay, duration} = props
+    const { classes, progress, setProgress, setTime, play, setPlay, duration, disabled } = props
 
     useEffect(() => {
-        if(active || hover){
-            setFocus(true)
-        }else {
-            setFocus(false)
+        if (!disabled) {
+
+            if (active || hover) {
+                setFocus(true)
+            } else {
+                setFocus(false)
+            }
         }
-    }, [active, hover])
+    }, [active, disabled, hover])
 
     return (
-        <div className={classes.root} onMouseOver={() => {setHover(true)}} onMouseOut={() => {setHover(false)}}>
+        <div className={classes.root} onMouseOver={() => { setHover(true) }} onMouseOut={() => { setHover(false) }}>
             {/* <Slider className={clsx(classes.progBar, focus? classes.progBarMax : classes.progBarMin)}/> */}
-            <Slider 
-            ref={slider}
-            step={1} 
-            min={0} 
-            max={duration}
-            value={progress} 
-            onChange={(e, v)=> {setTime(v);setActive(true); setProgress(v); setPlay(false)}}
-            onChangeCommitted={() => {setActive(false); setPlay(true)}}
-             className={clsx(classes.progBar, focus? classes.progBarMax : classes.progBarMin)}
-             ValueLabelComponent={ValueLabelComponent}
-             />
+            <Slider
+            disabled={disabled}
+                ref={slider}
+                step={1}
+                min={0}
+                max={duration}
+                value={progress}
+                onChange={(e, v) => { setTime(v); setActive(true); setProgress(v); setPlay(false) }}
+                onChangeCommitted={() => { setActive(false); setPlay(true) }}
+                className={clsx(classes.progBar, focus ? classes.progBarMax : classes.progBarMin)}
+                ValueLabelComponent={ValueLabelComponent}
+            />
         </div>
     )
 }

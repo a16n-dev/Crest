@@ -15,7 +15,7 @@ export const styles = (theme) => ({
         display: 'grid',
     },
     video: {
-        width: '100vw',
+        width: '100%',
         height: 'calc(100vh - 92px)',
         margin: 0,
         justifySelf: 'center',

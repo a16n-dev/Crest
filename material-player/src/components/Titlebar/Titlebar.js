@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {IconButton} from '@material-ui/core'
+import React, { useState } from 'react'
+import { IconButton } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import MinimizeIcon from '@material-ui/icons/Minimize';
@@ -11,14 +11,16 @@ export const styles = (theme) => ({
         '-webkit-app-region': 'drag',
         display: 'grid',
         gridTemplateColumns: 'auto auto',
-        height: '32px',
+        height: '30px',
         width: '100%',
         boxSizing: 'border-box',
         fontSize: '12px',
         background: theme.palette.background.default
     },
     titleBar: {
-        justifySelf: 'left'
+        justifySelf: 'left',
+        display: 'flex',
+        alignItems: 'center'
     },
     buttonBar: {
         '-webkit-app-region': 'none',
@@ -30,8 +32,11 @@ export const styles = (theme) => ({
         height: '33px'
     },
     titleLogo: {
-        height: '24px',
+        height: '22px',
         margin: '4px'
+    },
+    title: {
+
     }
 })
 
@@ -44,18 +49,20 @@ const Titlebar = (props) => {
         <div className={classes.root}>
 
             <div className={classes.titleBar}>
-            <img alt={'logo'} src={'x32.png'} className={classes.titleLogo}/>
-                {title}
+                <img alt={'logo'} src={'x32.png'} className={classes.titleLogo} />
+                <div className={classes.title}>
+                    {title}
+                </div>
             </div>
             <div className={classes.buttonBar}>
                 <IconButton className={classes.button} aria-label="Exit" size={'small'} onClick={() => window.winAction.action('minimise')}>
-                    <MinimizeIcon fontSize={'inherit'}/>
+                    <MinimizeIcon fontSize={'inherit'} />
                 </IconButton>
-                <IconButton className={classes.button} aria-label="Exit" size={'small'} onClick={() => {window.winAction.action('toggleMaximise'); setMax(!max)}}>
-                    {max? <FilterNoneIcon fontSize={'inherit'}/> : <CheckBoxOutlineBlankIcon fontSize={'inherit'}/>}
+                <IconButton className={classes.button} aria-label="Exit" size={'small'} onClick={() => { window.winAction.action('toggleMaximise'); setMax(!max) }}>
+                    {max ? <FilterNoneIcon fontSize={'inherit'} /> : <CheckBoxOutlineBlankIcon fontSize={'inherit'} />}
                 </IconButton>
                 <IconButton className={classes.button} aria-label="Exit" size={'small'} onClick={() => window.winAction.action('close')}>
-                    <CloseIcon fontSize={'inherit'}/>
+                    <CloseIcon fontSize={'inherit'} />
                 </IconButton>
             </div>
         </div>

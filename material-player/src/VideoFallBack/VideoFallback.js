@@ -9,6 +9,9 @@ export const styles = (theme) => ({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    shadow: {
+       opacity: 0.25
     }
 })
 
@@ -18,9 +21,7 @@ const VideoFallback = (props) => {
 
     return (
         <div className={classes.root}>
-            <div>
-                No file selected <br/> go to file > open to open a video file
-            </div>
+            <img className={classes.shadow} src={'shadow.png'} alt={''}/>
         </div>
     )
 }

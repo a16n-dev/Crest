@@ -22,5 +22,9 @@ contextBridge.exposeInMainWorld("loader", {
     async getFile() {
         const res = await ipcRenderer.invoke('getFile')
         return res;
+    },
+    async getUserFile() {
+        const res = await ipcRenderer.invoke('selectFile')
+        return res
     }
 })

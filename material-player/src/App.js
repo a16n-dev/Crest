@@ -3,6 +3,7 @@ import Titlebar from './components/Titlebar/Titlebar';
 import VideoPlayer from './views/VideoPlayer';
 import { Grow } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import Sidebar from './components/Sidebar/Sidebar';
 
 export const styles = (theme) => ({
   root: {
@@ -14,7 +15,11 @@ export const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    borderRadius: '5px'
+  },
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1
   }
 })
 
@@ -32,7 +37,11 @@ const App = (props) => {
   return (
     <div className={classes.root}>
       {!fullscreen ? <Titlebar title={title} /> : ""}
-        <VideoPlayer fullscreen={fullscreen} setFullscreen={setFullscreen} setTitle={setTitle} player={player}/>
+      <div className={classes.contentContainer}>
+        <Sidebar/>
+        <VideoPlayer fullscreen={fullscreen} setFullscreen={setFullscreen} setTitle={setTitle} player={player} />
+      </div>
+
     </div>
   );
 }

@@ -44,7 +44,7 @@ const getTime = (seconds) => {
 const VideoPlayer = (props) => {
     const { classes, fullscreen, setFullscreen, setTitle, player } = props
     const focus = useRef(null)
-    const [src, setSrc] = useState('')
+    const [src, setSrc] = useState(VIDEO[0])
     const [time, setTime] = useState(0)
     const [changeTime, setChangeTime] = useState(0)
     const [duration, setDuration] = useState(0)
@@ -69,6 +69,19 @@ const VideoPlayer = (props) => {
             console.log(err);
         });
     }, [setTitle])
+
+    useEffect(() => {
+        window.loader.getUserFile().then(({filePaths}) => {
+            console.log(filePaths);
+            if (filePaths.length > 0) {
+                setSrc(filePaths[0])
+                setPlay(true)
+            }
+
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, [])
 
 
     const handlePress = (e) => {

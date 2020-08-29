@@ -1,8 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { argv } = require('yargs')
 
-const PROD = true;
+const PROD = false;
 
 // Check for app updates
 //require('update-electron-app')()
@@ -79,6 +79,10 @@ ipcMain.handle("fullscreen", async (e, d) => {
 
 ipcMain.handle("getFile", async (e) => {
   return argv._
+});
+
+ipcMain.handle("selectFile", async (e) => {
+  return await dialog.showOpenDialog({ properties: ['openFile'] })
 });
 
 ipcMain.handle("winAction", async (e, d) => {

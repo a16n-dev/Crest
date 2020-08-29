@@ -20,6 +20,15 @@ export const styles = (theme) => ({
         display: 'flex',
         flexDirection: 'column',
     },
+    rootFullscreen: {
+        margin: '0 10%',
+        width: '80%',
+        position: 'absolute',
+        bottom: 0,
+        gridArea: 'controls',
+        display: 'flex',
+        flexDirection: 'column',
+    },
     controls: {
         height: '60px',
         display: 'grid',
@@ -74,7 +83,7 @@ const Controls = (props) => {
     }
 
     return (
-        <div className={classes.root} onKeyDown={(e) => e.keyCode === 32 ? e.stopPropagation() : null}>
+        <div className={fullscreen? classes.rootFullscreen : classes.root} onKeyDown={(e) => e.keyCode === 32 ? e.stopPropagation() : null}>
             <ProgressBar progress={progress} setProgress={setProgress} setTime={setTime} play={play} setPlay={setPlay} duration={duration} disabled={disabled} />
 
             <div className={fullscreen ? classes.controlsFullscreen : classes.controls}>
