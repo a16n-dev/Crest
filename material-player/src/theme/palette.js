@@ -15,6 +15,7 @@ const palette = {
   },
   background: {
     default: '#3B4750',
+    dark: '#273037',
     transparent: 'rgba(17,21,24,0.7)'
   }
 }

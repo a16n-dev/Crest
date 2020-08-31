@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { Slider, Tooltip } from '@material-ui/core';
+import { MediaContext } from '../../context/MediaContext';
+import { getTime } from '../../helper/formatter';
 
 export const styles = (theme) => ({
     root: {
@@ -57,12 +59,6 @@ export const styles = (theme) => ({
     },
 })
 
-const getTime = (seconds) => {
-    const min = Math.floor(seconds / 60);
-    const sec = Math.floor(seconds % 60)
-    return `${min}:${sec < 10 ? '0' : ''}${sec}`
-}
-
 function ValueLabelComponent(props) {
     const { children, open, value } = props;
     return (
@@ -73,13 +69,16 @@ function ValueLabelComponent(props) {
 }
 
 const ProgressBar = (props) => {
+    const {state, dispatch} = useContext(MediaContext);
+    const {media, disabled} = state
+
     const [focus, setFocus] = useState()
     const [hover, setHover] = useState()
     const [active, setActive] = useState()
 
     const slider = useRef(null);
 
-    const { classes, progress, setProgress, setTime, play, setPlay, duration, disabled } = props
+    const { classes, progress, setProgress } = props
 
     useEffect(() => {
         if (!disabled) {
@@ -92,6 +91,26 @@ const ProgressBar = (props) => {
         }
     }, [active, disabled, hover])
 
+    const handleScrub = (e, v)=> {
+        console.log('hureer');
+        setActive(true);
+        setProgress(v);
+        dispatch({
+            type: 'OVERRIDE_TIME',
+            time: v
+        })
+        dispatch({
+            type: 'FREEZE'
+        })
+    }
+
+    const handleScrubEnd = () => {
+        setActive(false);
+        dispatch({
+            type: 'UNFREEZE'
+        })
+    }
+
     return (
         <div className={classes.root} onMouseOver={() => { setHover(true) }} onMouseOut={() => { setHover(false) }}>
             {/* <Slider className={clsx(classes.progBar, focus? classes.progBarMax : classes.progBarMin)}/> */}
@@ -100,10 +119,10 @@ const ProgressBar = (props) => {
                 ref={slider}
                 step={1}
                 min={0}
-                max={duration}
+                max={media.duration}
                 value={progress}
-                onChange={(e, v) => { setTime(v); setActive(true); setProgress(v); setPlay(false) }}
-                onChangeCommitted={() => { setActive(false); setPlay(true) }}
+                onChange={handleScrub}
+                onChangeCommitted={handleScrubEnd}
                 className={clsx(classes.progBar, focus ? classes.progBarMax : classes.progBarMin)}
                 ValueLabelComponent={ValueLabelComponent}
             />

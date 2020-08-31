@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import Titlebar from './components/Titlebar/Titlebar';
 import VideoPlayer from './views/VideoPlayer';
 import { Grow } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Sidebar from './components/Sidebar/Sidebar';
+import { MediaProvider, MediaContext } from './context/MediaContext';
 
 export const styles = (theme) => ({
   root: {
@@ -28,7 +29,6 @@ const App = (props) => {
 
   const [fullscreen, setFullscreen] = useState(false);
   const [title, setTitle] = useState('')
-  const player = useRef(null)
 
   useEffect(() => {
     window.winAction.setFullscreen(fullscreen)
@@ -36,12 +36,13 @@ const App = (props) => {
 
   return (
     <div className={classes.root}>
-      {!fullscreen ? <Titlebar title={title} /> : ""}
-      <div className={classes.contentContainer}>
-        <Sidebar/>
-        <VideoPlayer fullscreen={fullscreen} setFullscreen={setFullscreen} setTitle={setTitle} player={player} />
-      </div>
-
+      <MediaProvider>
+        <Titlebar/>
+        <div className={classes.contentContainer}>
+          <Sidebar />
+          <VideoPlayer fullscreen={fullscreen} setFullscreen={setFullscreen} setTitle={setTitle} />
+        </div>
+      </MediaProvider>
     </div>
   );
 }

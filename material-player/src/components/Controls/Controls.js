@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Button, IconButton, Paper, Slider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
@@ -10,6 +10,9 @@ import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import VolumeControls from '../VolumeControls/VolumeControls';
+import { MediaContext } from '../../context/MediaContext';
+import { getTime } from '../../helper/formatter';
+
 
 export const styles = (theme) => ({
     root: {
@@ -68,19 +71,15 @@ export const styles = (theme) => ({
 })
 
 const Controls = (props) => {
-    const { classes, time, setTime, play, setPlay, duration, fullscreen, setFullscreen, volume, setVolume, mute, setMute, disabled } = props
+    const { classes, setTime, setPlay, duration, volume, setVolume, mute, setMute } = props
 
     const [progress, setProgress] = useState(0)
+    const {state, dispatch} = useContext(MediaContext);
+    const {time, fullscreen, play, disabled, media} = state
 
     useEffect(() => {
         setProgress(time)
     }, [time])
-
-    const getTime = (seconds) => {
-        const min = Math.floor(seconds / 60);
-        const sec = Math.floor(seconds % 60)
-        return `${min}:${sec < 10 ? '0' : ''}${sec}`
-    }
 
     return (
         <div className={fullscreen? classes.rootFullscreen : classes.root} onKeyDown={(e) => e.keyCode === 32 ? e.stopPropagation() : null}>
@@ -96,7 +95,7 @@ const Controls = (props) => {
                     <IconButton aria-label="Previous" onClick={() => { setTime(0) }} disabled={disabled}>
                         <SkipPreviousIcon />
                     </IconButton>
-                    <IconButton aria-label="Play/Pause" onClick={(e) => { setPlay(!play) }} disabled={disabled}>
+                    <IconButton aria-label="Play/Pause" onClick={(e) => { dispatch({type: 'TOGGLE_PLAYBACK'})  }} disabled={disabled}>
                         {play ? <PauseIcon /> : <PlayArrowIcon />}
                     </IconButton>
                     <IconButton aria-label="Next" disabled={disabled}>
@@ -107,8 +106,8 @@ const Controls = (props) => {
 
 
                 <div className={classes.fullscreenButtons}>
-                    <h5>{disabled ? '' : <>{getTime(progress)} / {getTime(duration)}</>}</h5>
-                    <IconButton aria-label="Toggle Fullscreen" onClick={() => setFullscreen(!fullscreen)}>
+                    <h5>{disabled ? '' : <>{getTime(progress)} / {getTime(media.duration)}</>}</h5>
+                    <IconButton aria-label="Toggle Fullscreen" onClick={() => dispatch({type: 'TOGGLE_FULLSCREEN'})}>
                         {fullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
                     </IconButton>
                 </div>

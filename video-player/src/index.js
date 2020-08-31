@@ -1,8 +1,8 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem } = require('electron');
 const path = require('path');
 const { argv } = require('yargs')
 
-const PROD = false;
+const PROD = true;
 
 // Check for app updates
 //require('update-electron-app')()
@@ -13,6 +13,20 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 let mainWin
+
+const menu = new Menu()
+
+menu.append(new MenuItem({
+  label: 'Fullscreen',
+  accelerator: 'G',
+  click: () => { mainWin.webContents.send('Keypress', 'g') }
+}))
+
+menu.append(new MenuItem({
+  label: 'Play / Pause',
+  accelerator: 'space',
+  click: () => { mainWin.webContents.send('Keypress', 'space') }
+}))
 
 const createWindow = () => {
   // Create the browser window.
@@ -42,7 +56,8 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  
+  Menu.setApplicationMenu(menu)
+
 };
 
 // This method will be called when Electron has finished
@@ -82,7 +97,13 @@ ipcMain.handle("getFile", async (e) => {
 });
 
 ipcMain.handle("selectFile", async (e) => {
-  return await dialog.showOpenDialog({ properties: ['openFile'] })
+  return await dialog.showOpenDialog({ 
+    BrowserWindow: mainWin,
+    properties: ['openFile'],
+    filters: [
+      { name: 'Media files', extensions: ['mkv', 'avi', 'mp4'] },
+    ]
+   })
 });
 
 ipcMain.handle("winAction", async (e, d) => {

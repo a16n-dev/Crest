@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Menu, MenuItem, ListItemIcon, Snackbar, Grow } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Video from '../components/Video/Video';
@@ -11,6 +11,8 @@ import FastRewindIcon from '@material-ui/icons/FastRewind';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VideoFallback from '../VideoFallBack/VideoFallback';
+import { MediaContext } from '../context/MediaContext';
+import { getTime } from '../helper/formatter';
 
 const VIDEO = [
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
@@ -24,6 +26,7 @@ export const styles = (theme) => ({
         display: 'flex',
         flexGrow: 1,
         position: 'relative',
+        outline: 'none',
         '&:focus ': {
             outline: 'none'
         }
@@ -34,12 +37,6 @@ const initialDialogState = {
     mouseX: null,
     mouseY: null,
 };
-
-const getTime = (seconds) => {
-    const min = Math.floor(seconds / 60);
-    const sec = Math.floor(seconds % 60)
-    return `${min}:${sec < 10 ? '0' : ''}${sec}`
-}
 
 const VideoPlayer = (props) => {
     const { classes, fullscreen, setFullscreen, setTitle, player } = props
@@ -57,6 +54,8 @@ const VideoPlayer = (props) => {
     const [notifMsg, setNotifMsg] = useState('')
     const [incTime, setIncTime] = useState(0)
 
+    const {state, dispatch} = useContext(MediaContext);
+
     useEffect(() => {
         window.loader.getFile().then((result) => {
             console.log(result);
@@ -70,75 +69,19 @@ const VideoPlayer = (props) => {
         });
     }, [setTitle])
 
-    useEffect(() => {
-        window.loader.getUserFile().then(({filePaths}) => {
-            console.log(filePaths);
-            if (filePaths.length > 0) {
-                setSrc(filePaths[0])
-                setPlay(true)
-            }
+    // useEffect(() => {
+    //     window.loader.getUserFile().then(({filePaths}) => {
+    //         console.log(filePaths);
+    //         if (filePaths.length > 0) {
+    //             setSrc(filePaths[0])
+    //             setPlay(true)
+    //         }
 
-        }).catch((err) => {
-            console.log(err);
-        });
-    }, [])
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     });
+    // }, [])
 
-
-    const handlePress = (e) => {
-        e.stopPropagation()
-        const { keyCode } = e
-        switch (keyCode) {
-            //esc - exit fullscreen
-            case 27:
-                setFullscreen(false);
-                break;
-            //f - enter fullscreen
-            case 70:
-                setFullscreen(!fullscreen);
-                break;
-            //Spacebar
-            case 32:
-                setPlay(!play);
-                break;
-            //Right arrow
-            case 39:
-                setChangeTime(time + 5);
-                setIncTime(incTime + 5)
-                break;
-            //Left arrow
-            case 37:
-                setChangeTime(time - 5);
-                setIncTime(incTime - 5)
-                break;
-            //Right arrow bracket
-            case 190:
-                if (speed < 10) {
-                    setSpeed(speed + 0.25);
-                }
-                break;
-            //Left arrow bracket
-            case 188:
-                if (speed > 0.5) {
-                    setSpeed(speed - 0.25);
-                }
-                break;
-            //up arrow
-            case 38:
-                if (volume < 0.9) {
-                    setVolume(+(volume + 0.1).toFixed(2));  
-                }
-                break;
-            //down arrow
-            case 40:
-                if (volume > 0.1) {
-                    setVolume(+(volume - 0.1, 1).toFixed(2));
-                }
-                break;
-            default:
-                break
-        }
-
-    }
 
     useEffect(()=>{
         notify(`Speed: ${speed}x`)
@@ -190,7 +133,7 @@ const VideoPlayer = (props) => {
     }
 
     return (
-        <div className={classes.root} tabIndex={0} onKeyDown={handlePress} autoFocus ref={focus} onContextMenu={handleDialogClick}>
+        <div className={classes.root} tabIndex={0} autoFocus ref={focus} onContextMenu={handleDialogClick}>
             {src!==''? <Video
             player={player}
                 src={src}

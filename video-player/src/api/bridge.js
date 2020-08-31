@@ -14,6 +14,12 @@ contextBridge.exposeInMainWorld("winAction", {
     async action(a) {
         const res = await ipcRenderer.invoke('winAction', a)
         return res;
+    },
+
+    async on(channel, callback) {
+        ipcRenderer.on(channel, (e, d) => {
+            callback(d)
+        })
     }
 })
 

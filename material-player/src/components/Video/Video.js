@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import { withStyles } from '@material-ui/core/styles';
+import { MediaContext } from '../../context/MediaContext';
 
 export const styles = (theme) => ({
     root: {
@@ -32,46 +33,64 @@ export const styles = (theme) => ({
     },
     videoOverlay: {
         width: '100%',
-        height: '100%',
-        background: 'red'
+        height: '100%', 
     }
 })
 
 const Video = (props) => {
-    const { setTime, setChangeTime, changeTime, play, setDuration, src, fullscreen, speed, volume, mute, player } = props
     const video = useRef(null)
 
+    const {state, dispatch} = useContext(MediaContext);
+    const {fullscreen, speed, play, src, timeOverride, forcePause} = state
+
     const handleChange = (e) => {
-        setTime(e.target.currentTime)
+        dispatch({
+            type: 'SET_TIME',
+            time: e.target.currentTime
+        })
+    }
+
+    const handleMediaInfo = (e) => {
+        dispatch({
+            type: 'SET_MEDIA_INFO',
+            duration: e.target.duration,
+            tracks: e.target.audioTracks
+        })
     }
 
     useEffect(() => {
-        if (changeTime != null) {
-            video.current.currentTime = changeTime;
+        if (timeOverride != null) {
+            video.current.currentTime = timeOverride;
         }
-        setChangeTime(null);
-    }, [changeTime, setChangeTime])
+        dispatch({
+            type: 'RESET_OVERRIDE'
+        });
+    }, [dispatch, timeOverride])
 
     useEffect(() => {
-        if (play) {
-            video.current.play();
-        } else {
-            video.current.pause();
-        }
 
-    }, [play])
+        if(forcePause){
+            video.current.pause();
+        } else {
+            if (play) {
+                video.current.play();
+            } else {
+                video.current.pause();
+            }
+        }
+    }, [play, forcePause])
 
     useEffect(() => {
         video.current.playbackRate = speed;
     }, [speed])
 
     useEffect(() => {
-        video.current.volume = mute ? 0 : volume;
-    }, [volume, mute])
+        video.current.volume = state.mute ? 0 : state.volume;
+    }, [state.volume, state.mute])
 
     const { classes } = props
     return (
-        <div className={fullscreen ? classes.rootFullscreen : classes.root} ref={player}>
+        <div className={fullscreen ? classes.rootFullscreen : classes.root}>
             <div className={classes.videoOverlay}>
 
             </div>
@@ -80,7 +99,7 @@ const Video = (props) => {
                 className={fullscreen ? classes.videoFullscreen : classes.video}
                 src={src}
                 onTimeUpdate={(e) => handleChange(e)}
-                onDurationChange={(e) => setDuration(e.target.duration)}
+                onDurationChange={(e) => handleMediaInfo(e)}
             />
         </div>
     )
