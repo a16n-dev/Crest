@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Button, IconButton, Paper, Slider } from '@material-ui/core';
+import { Button, IconButton, Paper, Slider, Select, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
@@ -12,7 +12,7 @@ import ProgressBar from '../ProgressBar/ProgressBar';
 import VolumeControls from '../VolumeControls/VolumeControls';
 import { MediaContext } from '../../context/MediaContext';
 import { getTime } from '../../helper/formatter';
-
+import clsx from 'clsx';
 
 export const styles = (theme) => ({
     root: {
@@ -31,6 +31,10 @@ export const styles = (theme) => ({
         gridArea: 'controls',
         display: 'flex',
         flexDirection: 'column',
+        transition: '.2s opacity'
+    },
+    hidden:{
+        opacity: 0
     },
     controls: {
         height: '60px',
@@ -40,15 +44,16 @@ export const styles = (theme) => ({
         gridTemplateColumns: 'repeat(3,1fr)',
         boxSizing: 'border-box',
         justifyItems: 'stretch',
+        backgroundColor: theme.palette.background.default
     },
     controlsFullscreen: {
-        backdropFilter: 'blur(10px) brightness(60%)',
         height: '60px',
         display: 'grid',
         padding: '6px',
         gridTemplateAreas: '"settings playback fullscreen"',
         gridTemplateColumns: 'repeat(3,1fr)',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        backgroundColor: theme.palette.background.default
     },
     settingButtons: {
         gridArea: 'settings',
@@ -64,30 +69,63 @@ export const styles = (theme) => ({
         justifySelf: 'right',
         display: 'flex'
     },
-    volumeContainer: {
-
+    timeDisplay:{
+        padding: '0 8px',
+        minWidth: '80px'
+    },
+    textDisplay:{
+        padding: '0 4px',
+    },
+    dropdown: {
+        height: '48px',
+        padding: 0
     }
 
 })
+
+let timeout;
 
 const Controls = (props) => {
     const { classes, setTime, setPlay, duration, volume, setVolume, mute, setMute } = props
 
     const [progress, setProgress] = useState(0)
+    const [show, setShow] = useState(true)
     const {state, dispatch} = useContext(MediaContext);
-    const {time, fullscreen, play, disabled, media} = state
+    const {time, fullscreen, play, disabled, media, speed} = state
 
     useEffect(() => {
         setProgress(time)
     }, [time])
 
+    const handleMouseOver = () => {
+        if(fullscreen){
+            clearTimeout(timeout)
+            setShow(true)
+            timeout = setTimeout(()=>{
+                setShow(false)
+            },1500)
+        }
+    }
+
+    useEffect(()=>{
+        if(fullscreen){
+            timeout = setTimeout(()=>{
+                setShow(false)
+            },2500)
+        } else {
+            setShow(true)
+        }
+        
+    }, [fullscreen])
+
     return (
-        <div className={fullscreen? classes.rootFullscreen : classes.root} onKeyDown={(e) => e.keyCode === 32 ? e.stopPropagation() : null}>
-            <ProgressBar progress={progress} setProgress={setProgress} setTime={setTime} play={play} setPlay={setPlay} duration={duration} disabled={disabled} />
+        <div className={clsx(fullscreen? classes.rootFullscreen : classes.root, !show&&fullscreen&&classes.hidden)} onMouseMove={handleMouseOver} onKeyDown={(e) => e.keyCode === 32 ? e.stopPropagation() : null}>
+            <ProgressBar progress={progress} setProgress={setProgress}/>
 
             <div className={fullscreen ? classes.controlsFullscreen : classes.controls}>
                 <div className={classes.settingButtons}>
-                    <VolumeControls volume={volume} setVolume={setVolume} mute={mute} setMute={setMute} disabled={disabled} />
+                <h5 className={classes.timeDisplay}>{disabled ? '' : <>{getTime(progress)} / {getTime(media.duration)}</>}</h5>
+                    <VolumeControls/>
                 </div>
 
 
@@ -106,7 +144,6 @@ const Controls = (props) => {
 
 
                 <div className={classes.fullscreenButtons}>
-                    <h5>{disabled ? '' : <>{getTime(progress)} / {getTime(media.duration)}</>}</h5>
                     <IconButton aria-label="Toggle Fullscreen" onClick={() => dispatch({type: 'TOGGLE_FULLSCREEN'})}>
                         {fullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
                     </IconButton>

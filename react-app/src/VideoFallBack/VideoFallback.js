@@ -5,7 +5,7 @@ export const styles = (theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        background: theme.palette.background.transparent,
+        backgroundColor: theme.palette.background.dark,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',

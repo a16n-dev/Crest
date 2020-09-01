@@ -19,7 +19,7 @@ export const styles = (theme) => ({
   },
   contentContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     flexGrow: 1
   }
 })
@@ -27,20 +27,13 @@ export const styles = (theme) => ({
 const App = (props) => {
   const { classes } = props
 
-  const [fullscreen, setFullscreen] = useState(false);
-  const [title, setTitle] = useState('')
-
-  useEffect(() => {
-    window.winAction.setFullscreen(fullscreen)
-  }, [fullscreen])
-
   return (
     <div className={classes.root}>
       <MediaProvider>
         <Titlebar/>
         <div className={classes.contentContainer}>
           <Sidebar />
-          <VideoPlayer fullscreen={fullscreen} setFullscreen={setFullscreen} setTitle={setTitle} />
+          <VideoPlayer/>
         </div>
       </MediaProvider>
     </div>

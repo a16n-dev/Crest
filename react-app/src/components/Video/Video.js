@@ -17,7 +17,7 @@ export const styles = (theme) => ({
     },
     video: {
         width: '100%',
-        height: 'calc(100vh - 92px)',
+        height: 'calc(100vh - 117px)',
         margin: 0,
         justifySelf: 'center',
         alignSelf: 'center',
@@ -55,6 +55,12 @@ const Video = (props) => {
             type: 'SET_MEDIA_INFO',
             duration: e.target.duration,
             tracks: e.target.audioTracks
+        })
+    }
+
+    const handleMediaEnd = (e) => {
+        dispatch({
+            type: 'CLEAR_MEDIA'
         })
     }
 
@@ -100,6 +106,7 @@ const Video = (props) => {
                 src={src}
                 onTimeUpdate={(e) => handleChange(e)}
                 onDurationChange={(e) => handleMediaInfo(e)}
+                onEnded={handleMediaEnd}
             />
         </div>
     )

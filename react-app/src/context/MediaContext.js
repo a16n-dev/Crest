@@ -19,6 +19,12 @@ const mediaReducer = (state, action) => {
                 ...state,
                 timeOverride: action.time
             }
+        case 'TOGGLE_MUTE':
+            return {
+                ...state,
+                mute: !state.mute
+
+            }
         case 'SET_MEDIA_INFO':
             return {
                 ...state,
@@ -36,6 +42,7 @@ const mediaReducer = (state, action) => {
         case 'SET_VOLUME':
             return {
                 ...state,
+                mute: false,
                 volume: action.volume
             }
         case 'TOGGLE_PLAYBACK':
@@ -62,6 +69,18 @@ const mediaReducer = (state, action) => {
             return { ...state, forcePause: true }
         case 'UNFREEZE':
             return { ...state, forcePause: false }
+        case 'CLEAR_MEDIA':
+            return {
+                ...state, 
+                time: 0,
+                play: false,
+                disabled: true,
+                media: {
+                    src: '',
+                    title: '',
+                    duration: 1
+                },
+            }
         default:
             return state;
     }
@@ -91,6 +110,21 @@ const MediaContext = createContext();
 const MediaProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(mediaReducer, initialState);
+
+    // useEffect(() => {
+    //     window.loader.getFile().then((res) => {
+    //         console.log(res);
+    //         if (false) {
+    //             dispatch({
+    //                 type: 'SET_SRC',
+    //                 src: ''
+    //             })
+    //         }
+
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     });
+    // }, [])
 
     // Electron main process key press handlers
     useEffect(() => {

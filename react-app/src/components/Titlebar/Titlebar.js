@@ -16,7 +16,7 @@ export const styles = (theme) => ({
         width: '100%',
         boxSizing: 'border-box',
         fontSize: '12px',
-        background: theme.palette.background.default
+        background: theme.palette.background.dark
     },
     titleBar: {
         justifySelf: 'left',

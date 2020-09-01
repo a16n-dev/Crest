@@ -44,6 +44,12 @@ const overrides = {
             backgroundColor: palette.background.transparent,
             color: palette.text.primary
         }
+    },
+    MuiTooltip: {
+        tooltip: {
+            backgroundColor: palette.background.default
+        }
+        
     }
 
     // .MuiCollapse-container {

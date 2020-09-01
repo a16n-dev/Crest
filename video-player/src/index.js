@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem } = require('electron');
 const path = require('path');
 const { argv } = require('yargs')
+require('update-electron-app')()
 
 const PROD = true;
 
@@ -37,7 +38,6 @@ const createWindow = () => {
     minWidth: 300,
     frame: false,
     icon: __dirname + '/icon/x500.png',
-    backgroundColor: '#3B4750',
     webPreferences: {
       preload: path.join(__dirname, 'api/bridge.js'),
       nodeIntegration: false,

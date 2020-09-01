@@ -18,7 +18,7 @@ export const styles = (theme) => ({
         background: theme.palette.background.default,
         '& > .MuiSlider-rail': {
             transition: 'height .1s',
-            background: 'black',
+            background: 'rgba(0,0,0,0.54)'
         },
         '& > .MuiSlider-track': {
             transition: 'height .1s',
@@ -115,7 +115,7 @@ const ProgressBar = (props) => {
         <div className={classes.root} onMouseOver={() => { setHover(true) }} onMouseOut={() => { setHover(false) }}>
             {/* <Slider className={clsx(classes.progBar, focus? classes.progBarMax : classes.progBarMin)}/> */}
             <Slider
-            disabled={disabled}
+                disabled={disabled}
                 ref={slider}
                 step={1}
                 min={0}

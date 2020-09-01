@@ -35,10 +35,10 @@ export const styles = (theme) => ({
 let out;
 
 const VolumeControls = (props) => {
-    const { classes, setMute, disabled } = props
+    const { classes } = props
 
     const {state, dispatch} = useContext(MediaContext);
-    const {volume, mute} = state
+    const {volume, mute, disabled} = state
 
     const [expand, setExpand] = useState(false)
 
@@ -58,7 +58,7 @@ const VolumeControls = (props) => {
 
     return (
         <div className={classes.root} onMouseEnter={() => setExpand(true)} onMouseLeave={() => setExpand(false)}>
-            <IconButton aria-label="Mute" onClick={() => setMute(!mute)} disabled={disabled}>
+            <IconButton aria-label="Mute" onClick={() => dispatch({type: 'TOGGLE_MUTE'})} disabled={disabled}>
                 {volume === 0 || mute ? <VolumeOffIcon /> : volume < 0.3 ? <VolumeMuteIcon /> : volume < 0.6 ? <VolumeDownIcon /> : <VolumeUpIcon />}
             </IconButton>
             <div className={expand && !disabled? classes.shown : classes.hidden} >

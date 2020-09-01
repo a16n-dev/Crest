@@ -1,6 +1,6 @@
 {
   "name": "video-player",
-  "productName": "Shale",
+  "productName": "Crest",
   "version": "1.0.0",
   "description": "Lightweight media player",
   "main": "src/index.js",
@@ -17,9 +17,24 @@
     "name": "Alexander Nicholson",
     "email": "alexn400@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexn400/Crest.git"
+  },
   "license": "MIT",
   "config": {
     "forge": {
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "alexn400",
+              "name": "Crest"
+            }
+          }
+        }
+      ],
       "packagerConfig": {
         "icon": "src/icon/x500.png"
       },
@@ -27,7 +42,9 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "video_player"
+            "name": "Crest",
+            "loadingGif": "./installer_assets/loading.gif",
+            "setupIcon": "./installer_assets/icon.ico"
           }
         },
         {
@@ -58,6 +75,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.53",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.53",
     "@electron-forge/maker-zip": "^6.0.0-beta.53",
+    "@electron-forge/publisher-github": "^6.0.0-beta.53",
     "electron": "10.0.0"
   }
 }
