@@ -74,9 +74,9 @@ ipcMain.handle('fullscreen', async (e, d) => {
   return 0;
 });
 
-ipcMain.handle('getFile', async (e) => argv._);
+ipcMain.handle('getFile', async () => argv._);
 
-ipcMain.handle('selectFile', async (e) => dialog.showOpenDialog({
+ipcMain.handle('selectFile', async () => dialog.showOpenDialog({
   BrowserWindow: mainWin,
   properties: ['openFile'],
   filters: [

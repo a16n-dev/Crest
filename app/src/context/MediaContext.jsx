@@ -1,29 +1,21 @@
 import React, { useReducer, createContext, useEffect } from 'react';
-
+import * as VideoReducer from './reducer/MediaReducer';
 // reducer
 const mediaReducer = (state, action) => {
   switch (action.type) {
     case 'INC_SPEED':
-      // Notify
       return {
         ...state,
         speed: state.speed + 0.25,
       };
     case 'SET_TIME':
-      return {
-        ...state,
-        time: action.time,
-      };
+      return VideoReducer.SET_TIME(state, action);
     case 'OVERRIDE_TIME':
-      return {
-        ...state,
-        timeOverride: action.time,
-      };
+      return VideoReducer.OVERRIDE_TIME(state, action);
     case 'TOGGLE_MUTE':
       return {
         ...state,
         mute: !state.mute,
-
       };
     case 'SET_MEDIA_INFO':
       return {
@@ -51,18 +43,16 @@ const mediaReducer = (state, action) => {
         play: !state.play,
       };
     case 'SET_SRC':
-      const name = action.src.split(/[\\/]/).pop();
       return {
         ...state,
         src: action.src,
+        speed: 1,
         play: true,
         disabled: false,
-        title: name,
-        timeOverride: 0,
         media: {
           ...state.media,
           src: action.src,
-          title: name,
+          title: action.src.split(/[\\/]/).pop(),
         },
       };
     case 'FREEZE':
@@ -112,20 +102,19 @@ const MediaContext = createContext();
 const MediaProvider = ({ children }) => {
   const [state, dispatch] = useReducer(mediaReducer, initialState);
 
-  // useEffect(() => {
-  //     window.loader.getFile().then((res) => {
-  //         console.log(res);
-  //         if (false) {
-  //             dispatch({
-  //                 type: 'SET_SRC',
-  //                 src: ''
-  //             })
-  //         }
-
-  //     }).catch((err) => {
-  //         console.log(err);
-  //     });
-  // }, [])
+  useEffect(() => {
+    window.loader.getFile().then((res) => {
+      console.log(res);
+      if (res.length !== 0) {
+        dispatch({
+          type: 'SET_SRC',
+          src: res[0],
+        });
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }, []);
 
   // Electron main process key press handlers
   useEffect(() => {
@@ -137,7 +126,9 @@ const MediaProvider = ({ children }) => {
           });
           break;
         case 'space':
-
+          dispatch({
+            type: 'TOGGLE_PLAYBACK',
+          });
           break;
         default:
           break;
