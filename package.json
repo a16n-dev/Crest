@@ -11,13 +11,25 @@
     "dev-server": "cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
     "eb-pack": "electron-builder --dir",
-    "eb-dist": "electron-builder"
+    "eb-dist": "electron-builder",
+    "eb-dist-win": "electron-builder --windows nsis:ia32"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "build": {
     "appId": "com.example.app",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
     "directories": {
       "buildResources": "resource"
     },

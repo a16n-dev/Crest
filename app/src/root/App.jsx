@@ -5,7 +5,7 @@ import { Grow } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Titlebar from '../components/Titlebar/Titlebar';
 import VideoPlayer from '../views/VideoPlayer';
-import Sidebar from '../components/Sidebar/Sidebar';
+import Menubar from '../components/Menubar/Menubar';
 import { MediaProvider } from '../context/MediaContext';
 
 export const styles = (theme) => ({
@@ -34,7 +34,7 @@ const App = (props) => {
       <MediaProvider>
         <Titlebar />
         <div className={classes.contentContainer}>
-          <Sidebar />
+          <Menubar />
           <VideoPlayer />
         </div>
       </MediaProvider>

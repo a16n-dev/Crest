@@ -76,7 +76,7 @@ ipcMain.handle('fullscreen', async (e, d) => {
 
 ipcMain.handle('getFile', async (e) => argv._);
 
-ipcMain.handle('selectFile', async (e) => await dialog.showOpenDialog({
+ipcMain.handle('selectFile', async (e) => dialog.showOpenDialog({
   BrowserWindow: mainWin,
   properties: ['openFile'],
   filters: [
@@ -93,6 +93,13 @@ ipcMain.handle('winAction', async (e, d) => {
       mainWin.minimize();
       break;
     case 'toggleMaximise':
-      mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize();
+      if (mainWin.isMaximized()) {
+        mainWin.unmaximize();
+      } else {
+        mainWin.maximize();
+      }
+      break;
+    default:
+      break;
   }
 });

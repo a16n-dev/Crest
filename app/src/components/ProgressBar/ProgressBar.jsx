@@ -92,7 +92,6 @@ const ProgressBar = (props) => {
   }, [active, disabled, hover]);
 
   const handleScrub = (e, v) => {
-    console.log('hureer');
     setActive(true);
     setProgress(v);
     dispatch({

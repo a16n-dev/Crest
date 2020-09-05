@@ -127,6 +127,7 @@ const Controls = (props) => {
       className={clsx(fullscreen ? classes.rootFullscreen : classes.root, !show && fullscreen && classes.hidden)}
       onMouseMove={handleMouseOver}
       onKeyDown={(e) => (e.keyCode === 32 ? e.stopPropagation() : null)}
+      role={'button'}
     >
       <ProgressBar progress={progress} setProgress={setProgress} />
 
@@ -147,13 +148,13 @@ const Controls = (props) => {
         </div>
 
         <div className={classes.playbackButtons}>
-          <IconButton aria-label="Previous" onClick={() => { setTime(0); }} disabled={disabled}>
+          <IconButton aria-label="Previous" onClick={() => { dispatch({ type: 'OVERRIDE_TIME', time: 0 }); }} disabled={disabled}>
             <SkipPreviousIcon />
           </IconButton>
           <IconButton aria-label="Play/Pause" onClick={(e) => { dispatch({ type: 'TOGGLE_PLAYBACK' }); }} disabled={disabled}>
             {play ? <PauseIcon /> : <PlayArrowIcon />}
           </IconButton>
-          <IconButton aria-label="Next" disabled={disabled}>
+          <IconButton aria-label="Next" onClick={() => { dispatch({ type: 'OVERRIDE_TIME', time: media.duration }); }}  disabled={disabled}>
             <SkipNextIcon />
           </IconButton>
 

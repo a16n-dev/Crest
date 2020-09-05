@@ -30,7 +30,7 @@ export const styles = (theme) => ({
   },
 });
 
-const Sidebar = (props) => {
+const Menubar = (props) => {
   const { classes } = props;
 
   const [show, setShow] = useState(true);
@@ -61,7 +61,7 @@ const Sidebar = (props) => {
           <PermMediaIcon fontSize="inherit" />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Load Dummy file" placement="bottom">
+      {/* <Tooltip title="Load Dummy file" placement="bottom">
         <IconButton
           aria-label="Open file"
           onClick={() => dispatch({
@@ -72,14 +72,10 @@ const Sidebar = (props) => {
         >
           D
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
       <Tooltip title="Settings" placement="bottom">
         <IconButton
           aria-label="Settings"
-          onClick={() => dispatch({
-            type: 'SET_SRC',
-            src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          })}
           className={clsx(classes.button, classes.buttonEnd)}
         >
           <SettingsIcon fontSize="inherit" />
@@ -89,4 +85,4 @@ const Sidebar = (props) => {
   );
 };
 
-export default withStyles(styles, { name: 'PLSidebar' })(Sidebar);
+export default withStyles(styles, { name: 'PLMenubar' })(Menubar);

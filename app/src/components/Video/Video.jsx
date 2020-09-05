@@ -71,10 +71,10 @@ const Video = (props) => {
   useEffect(() => {
     if (timeOverride != null) {
       video.current.currentTime = timeOverride;
+      dispatch({
+        type: 'RESET_OVERRIDE',
+      });
     }
-    dispatch({
-      type: 'RESET_OVERRIDE',
-    });
   }, [dispatch, timeOverride]);
 
   useEffect(() => {
