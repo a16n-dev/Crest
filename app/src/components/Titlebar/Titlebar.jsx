@@ -58,7 +58,8 @@ const Titlebar = (props) => {
       <div className={classes.titleBar}>
         <img alt="logo" src="../resource/img/x32.png" className={classes.titleLogo} />
         <div className={classes.title}>
-          {media.title}
+          {/* {media.title} */}
+          If you are seeing this then it updated!
         </div>
       </div>
       <div className={classes.buttonBar}>

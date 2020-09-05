@@ -1,24 +1,27 @@
 {
   "name": "crest",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lightweight media player",
   "main": "app/electron/main.js",
   "scripts": {
     "dev": "concurrently --success first \"npm run dev-server\" \"npm run electron\" -k",
     "pack": "npm run build && npm run eb-pack",
     "dist": "npm run build && npm run eb-dist",
+    "publish": "npm run build && npm run eb-publish",
     "electron": "cross-env NODE_ENV=development electron .",
     "dev-server": "cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
     "eb-pack": "electron-builder --dir",
     "eb-dist": "electron-builder",
-    "eb-dist-win": "electron-builder --windows nsis:ia32"
+    "eb-publish": "electron-builder build -p always",
+    "eb-dist-win": "electron-builder --windows nsis:ia32",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "build": {
-    "appId": "com.example.app",
+    "appId": "com.github.alexn400.crest",
     "win": {
       "target": [
         {
@@ -38,10 +41,6 @@
       "app/resource/**/*",
       "app/electron/**/*"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/alexn400/Crest.git"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
