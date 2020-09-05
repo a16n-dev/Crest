@@ -1,6 +1,6 @@
 {
   "name": "crest",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight media player",
   "main": "app/electron/main.js",
   "scripts": {
